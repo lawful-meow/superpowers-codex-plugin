@@ -19,11 +19,10 @@
     "workflows"
   ],
   "skills": "./skills/",
-  "hooks": "./hooks.json",
   "interface": {
     "displayName": "Superpowers",
     "shortDescription": "Bring the Superpowers skills library into Codex as a standalone plugin snapshot",
-    "longDescription": "A Codex-focused wrapper around the Superpowers 5.0.6 release. The plugin now bundles the upstream skills, named-agent prompts, slash commands, and session-start hook files, while keeping the packaging centered on Codex-compatible surfaces.",
+    "longDescription": "A Codex-focused wrapper around the Superpowers 5.0.6 release. The plugin bundle carries the upstream skills, named-agent prompts, commands, and hook runtime files, while the installer configures Codex hooks through ~/.codex/hooks.json.",
     "developerName": "Jesse Vincent",
     "category": "Coding",
     "capabilities": [

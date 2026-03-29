@@ -1,102 +1,110 @@
 # Superpowers Codex Plugin
 
-Superpowers Codex Plugin packages [obra/superpowers](https://github.com/obra/superpowers) `v5.0.6` as a Codex plugin bundle.
+Superpowers Codex Plugin packages [obra/superpowers](https://github.com/obra/superpowers) `v5.0.6` for Codex.
 
-The repository adapts the upstream Superpowers runtime surfaces into a Codex plugin layout while preserving upstream provenance and release alignment.
+The repository separates Codex integration into two layers:
 
-## Overview
+- a marketplace plugin for the Superpowers bundle under `~/plugins/superpowers`
+- a home-wide Codex hooks setup under `~/.codex/hooks.json`
 
-The bundle includes the upstream:
+This matches the current Codex model: plugin assets are installed through the plugin marketplace, while hooks are configured through Codex config files.
+
+## Install
+
+Managed install:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/lawful-meow/superpowers-codex-plugin/refs/heads/main/scripts/install.sh)
+```
+
+Codex prompt install:
+
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/lawful-meow/superpowers-codex-plugin/refs/heads/main/.codex/INSTALL.md
+```
+
+After the installer finishes, restart Codex. The installer writes the marketplace entry, enables the plugin in `~/.codex/config.toml`, and configures the home-wide hooks.
+
+Full install and verification steps are documented in [`.codex/INSTALL.md`](./.codex/INSTALL.md).
+
+## What the Installer Configures
+
+The managed installer:
+
+- clones or updates this repository under `~/.codex/superpowers-codex-plugin`
+- copies the plugin bundle to `~/plugins/superpowers`
+- merges a `superpowers` plugin entry into `~/.agents/plugins/marketplace.json`
+- marks the home marketplace entry as `INSTALLED_BY_DEFAULT`
+- ensures `multi_agent = true` and `codex_hooks = true` in `~/.codex/config.toml`
+- enables `superpowers@<marketplace-name>` in `~/.codex/config.toml`
+- merges Superpowers handlers into `~/.codex/hooks.json`
+
+The plugin bundle itself includes the upstream:
 
 - `skills/`
 - `agents/`
 - `commands/`
 - `hooks/`
 
-The Codex-facing structure is:
+The Codex hook runtime is installed from `plugins/superpowers/hooks/`, but it is activated through `~/.codex/hooks.json` rather than through the plugin manifest.
 
-- `.agents/plugins/marketplace.json`
-- `plugins/superpowers/.codex-plugin/plugin.json`
-- `plugins/superpowers/skills/`
-- `plugins/superpowers/agents/`
-- `plugins/superpowers/commands/`
-- `plugins/superpowers/hooks/`
-- `plugins/superpowers/hooks.json`
-- marketplace policy: `AVAILABLE`
+## Verify
 
-## Installation
+Plugin install:
 
-Codex installation currently requires a short marketplace flow:
+- Restart Codex after running the installer.
+- Open the Plugins marketplace and confirm `Superpowers` is already enabled in your personal marketplace.
 
-1. Add or load the `Superpowers Local` marketplace.
-2. Open the Plugins marketplace in Codex.
-3. Filter to `Superpowers Local`.
-4. Click install on `Superpowers`.
+Skill activation:
 
-The detailed setup steps are documented in [`.codex/INSTALL.md`](./.codex/INSTALL.md).
+- Start a new session and ask:
+  `Help me plan this feature before writing code.`
+- Codex should shift into a planning-first workflow instead of going straight to implementation.
 
-## Configuration
+Hook activation:
 
-Subagent-heavy skills benefit from enabling Codex multi-agent support:
+- Create the debug marker:
+  ```bash
+  touch ~/.codex/superpowers-hooks-debug
+  ```
+- Restart Codex.
+- Start a new session, submit a prompt, and run at least one Bash command through Codex.
+- Inspect the hook log:
+  ```bash
+  cat ~/.codex/logs/superpowers-hooks.log
+  ```
+- Remove the marker to disable debug output:
+  ```bash
+  rm ~/.codex/superpowers-hooks-debug
+  ```
 
-```toml
-[features]
-multi_agent = true
-```
-
-Add that block to `~/.codex/config.toml` to support flows such as `dispatching-parallel-agents` and `subagent-driven-development`.
+Codex hooks are experimental, require `codex_hooks = true`, and are currently disabled on Windows.
 
 ## Repository Layout
 
-- `plugins/superpowers/.codex-plugin/plugin.json`
-  Codex plugin manifest.
-- `plugins/superpowers/skills/`
-  Superpowers skills snapshot from upstream `v5.0.6`.
-- `plugins/superpowers/agents/`
-  Bundled agent prompt files.
-- `plugins/superpowers/commands/`
-  Bundled command markdown files.
-- `plugins/superpowers/hooks/`
-  Upstream hook scripts and source configs.
-- `plugins/superpowers/hooks.json`
-  Codex hook entrypoint for the bundled session-start hook.
-- `.agents/plugins/marketplace.json`
-  Local marketplace entry pointing to `./plugins/superpowers`.
-
-## Publishing
-
-This repository can be published as a standalone GitHub project with standard Git commands:
-
-```bash
-cd /Users/lap16355/Downloads/SUperpower/superpowers-codex-plugin
-git init
-git add .
-git commit -m "Initial Codex wrapper for Superpowers v5.0.6"
-git branch -M main
-git remote add origin git@github.com:lawful-meow/superpowers-codex-plugin.git
-git push -u origin main
-```
-
-Equivalent GitHub CLI workflow:
-
-```bash
-gh repo create lawful-meow/superpowers-codex-plugin --public --source=. --remote=origin --push
-```
+- [`plugins/superpowers/.codex-plugin/plugin.json`](./plugins/superpowers/.codex-plugin/plugin.json)
+  Marketplace-installed Codex plugin manifest.
+- [`scripts/install.py`](./scripts/install.py)
+  Managed installer that updates `~/plugins`, `~/.agents`, and `~/.codex`.
+- [`scripts/install.sh`](./scripts/install.sh)
+  One-command bootstrap for remote installation.
+- [`plugins/superpowers/hooks/codex-hook.py`](./plugins/superpowers/hooks/codex-hook.py)
+  Codex hook handler for `SessionStart`, `PreToolUse`, `PostToolUse`, `UserPromptSubmit`, and `Stop`.
+- [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
+  Repo-local marketplace entry for local development and testing.
 
 ## Updating
 
-When a new Superpowers release is adopted, refresh these directories from upstream:
+When a new upstream Superpowers release is adopted:
 
-- `plugins/superpowers/skills/`
-- `plugins/superpowers/agents/`
-- `plugins/superpowers/commands/`
-- `plugins/superpowers/hooks/`
-
-Then update:
-
-- `plugins/superpowers/.codex-plugin/plugin.json`
-- `README.md`
-- `.codex/INSTALL.md`
+1. Refresh `plugins/superpowers/skills/`, `plugins/superpowers/agents/`, `plugins/superpowers/commands/`, and `plugins/superpowers/hooks/` from upstream.
+2. Keep Codex-specific files aligned with the new snapshot:
+   - `plugins/superpowers/.codex-plugin/plugin.json`
+   - `plugins/superpowers/hooks/codex-hook.py`
+   - `scripts/install.py`
+   - `.codex/INSTALL.md`
+   - `README.md`
+3. Re-run the installer or reinstall into a temp home directory to verify marketplace, config, and hook merges.
 
 ## Provenance
 

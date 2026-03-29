@@ -1,69 +1,38 @@
 # Installing Superpowers Codex Plugin
 
-Install this wrapper by cloning the repository, copying the packaged plugin to your home-local plugins directory, and registering the marketplace entry.
+Install Superpowers for Codex with one command:
 
-## Installation
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/lawful-meow/superpowers-codex-plugin/refs/heads/main/scripts/install.sh)
+```
 
-1. Clone the repository:
+The installer clones or updates this repository under `~/.codex/superpowers-codex-plugin`, copies the packaged plugin to `~/plugins/superpowers`, merges a `superpowers` entry into `~/.agents/plugins/marketplace.json`, enables `multi_agent` and `codex_hooks`, and writes the Superpowers hook configuration to `~/.codex/hooks.json`.
 
-   ```bash
-   git clone https://github.com/lawful-meow/superpowers-codex-plugin.git ~/.codex/superpowers-codex-plugin
-   ```
+## After the Installer
 
-2. Create the local plugin directories:
+Restart Codex.
 
-   ```bash
-   mkdir -p ~/.agents/plugins ~/plugins
-   ```
+The installer also writes `enabled = true` for `superpowers@<marketplace-name>` in `~/.codex/config.toml`, so no separate marketplace install click is required.
 
-3. Copy the plugin bundle into `~/plugins`:
+## Optional Hook Debug Mode
 
-   ```bash
-   rm -rf ~/plugins/superpowers
-   cp -R ~/.codex/superpowers-codex-plugin/plugins/superpowers ~/plugins/superpowers
-   ```
+Enable hook logging:
 
-4. Register the marketplace entry:
+```bash
+touch ~/.codex/superpowers-hooks-debug
+```
 
-   If `~/.agents/plugins/marketplace.json` does not exist yet, copy the repository version:
+Restart Codex, then trigger a new session, submit a prompt, and run a Bash command through Codex. Inspect the log:
 
-   ```bash
-   cp ~/.codex/superpowers-codex-plugin/.agents/plugins/marketplace.json ~/.agents/plugins/marketplace.json
-   ```
+```bash
+cat ~/.codex/logs/superpowers-hooks.log
+```
 
-   If you already have `~/.agents/plugins/marketplace.json`, merge this plugin entry into it instead of overwriting the file:
+Disable hook logging:
 
-   ```json
-   {
-     "name": "superpowers",
-     "source": {
-       "source": "local",
-       "path": "./plugins/superpowers"
-     },
-     "policy": {
-       "installation": "AVAILABLE",
-       "authentication": "ON_INSTALL"
-     },
-     "category": "Coding"
-   }
-   ```
-
-5. Optional, but recommended for subagent-heavy skills:
-
-   Add this to `~/.codex/config.toml`:
-
-   ```toml
-   [features]
-   multi_agent = true
-   ```
-
-6. Open the Plugins marketplace in Codex.
-
-7. Filter the marketplace list to `Superpowers Local`.
-
-8. Click install on `Superpowers`.
-
-9. Restart Codex if the plugin does not appear immediately.
+```bash
+rm ~/.codex/superpowers-hooks-debug
+```
 
 ## Verify
 
@@ -72,10 +41,23 @@ Check the installed files:
 ```bash
 ls -la ~/plugins/superpowers
 ls -la ~/.agents/plugins/marketplace.json
+ls -la ~/.codex/hooks.json
 ```
 
-Then ask Codex for something that should trigger Superpowers, for example:
+Check the enabled features:
 
-- `help me plan this feature`
-- `use systematic debugging on this bug`
-- `execute this approved plan with tests first`
+```bash
+rg -n 'multi_agent|codex_hooks|superpowers@' ~/.codex/config.toml
+```
+
+Then start a new Codex session and ask for a planning-oriented task, for example:
+
+- `Help me plan this feature before writing code.`
+- `Use systematic debugging on this bug.`
+- `Execute this approved plan with tests first.`
+
+## Notes
+
+- Codex hooks are experimental.
+- `codex_hooks = true` is required.
+- Codex hooks are currently disabled on Windows.
