@@ -1,0 +1,42 @@
+{
+  "name": "superpowers",
+  "version": "5.0.6",
+  "description": "Codex plugin wrapper for the Superpowers skills library: TDD, debugging, collaboration patterns, and proven techniques.",
+  "author": {
+    "name": "Jesse Vincent",
+    "email": "jesse@fsck.com",
+    "url": "https://github.com/obra"
+  },
+  "homepage": "https://github.com/obra/superpowers",
+  "repository": "https://github.com/obra/superpowers",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "codex",
+    "tdd",
+    "debugging",
+    "collaboration",
+    "workflows"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks.json",
+  "interface": {
+    "displayName": "Superpowers",
+    "shortDescription": "Bring the Superpowers skills library into Codex as a standalone plugin snapshot",
+    "longDescription": "A Codex-focused wrapper around the Superpowers 5.0.6 release. The plugin now bundles the upstream skills, named-agent prompts, slash commands, and session-start hook files, while keeping the packaging centered on Codex-compatible surfaces.",
+    "developerName": "Jesse Vincent",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/obra/superpowers",
+    "defaultPrompt": [
+      "Help me plan this feature before writing code.",
+      "Use systematic debugging to isolate this bug.",
+      "Execute this approved plan with tests first."
+    ],
+    "brandColor": "#1F2937"
+  }
+}
