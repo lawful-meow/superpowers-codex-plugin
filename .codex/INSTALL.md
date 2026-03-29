@@ -7,7 +7,7 @@ Install this wrapper by cloning the repository, copying the packaged plugin to y
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/<your-user>/superpowers-codex-plugin.git ~/.codex/superpowers-codex-plugin
+   git clone https://github.com/lawful-meow/superpowers-codex-plugin.git ~/.codex/superpowers-codex-plugin
    ```
 
 2. Create the local plugin directories:
