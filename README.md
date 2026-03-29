@@ -22,17 +22,18 @@ The Codex-facing structure is:
 - `plugins/superpowers/commands/`
 - `plugins/superpowers/hooks/`
 - `plugins/superpowers/hooks.json`
-- marketplace policy: `INSTALLED_BY_DEFAULT`
+- marketplace policy: `AVAILABLE`
 
 ## Installation
 
-Codex installation is exposed through a single prompt:
+Codex installation currently requires a short marketplace flow:
 
-```text
-Fetch and follow instructions from https://raw.githubusercontent.com/lawful-meow/superpowers-codex-plugin/refs/heads/main/.codex/INSTALL.md
-```
+1. Add or load the `Superpowers Local` marketplace.
+2. Open the Plugins marketplace in Codex.
+3. Filter to `Superpowers Local`.
+4. Click install on `Superpowers`.
 
-Manual installation steps are documented in [`.codex/INSTALL.md`](./.codex/INSTALL.md).
+The detailed setup steps are documented in [`.codex/INSTALL.md`](./.codex/INSTALL.md).
 
 ## Configuration
 

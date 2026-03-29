@@ -41,7 +41,7 @@ Install this wrapper by cloning the repository, copying the packaged plugin to y
        "path": "./plugins/superpowers"
      },
      "policy": {
-       "installation": "INSTALLED_BY_DEFAULT",
+       "installation": "AVAILABLE",
        "authentication": "ON_INSTALL"
      },
      "category": "Coding"
@@ -57,9 +57,13 @@ Install this wrapper by cloning the repository, copying the packaged plugin to y
    multi_agent = true
    ```
 
-6. Restart Codex.
+6. Open the Plugins marketplace in Codex.
 
-With `policy.installation` set to `INSTALLED_BY_DEFAULT`, the plugin is intended to appear as installed automatically when this marketplace is loaded.
+7. Filter the marketplace list to `Superpowers Local`.
+
+8. Click install on `Superpowers`.
+
+9. Restart Codex if the plugin does not appear immediately.
 
 ## Verify
 
