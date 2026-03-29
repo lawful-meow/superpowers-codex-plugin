@@ -22,6 +22,7 @@ The Codex-facing structure is:
 - `plugins/superpowers/commands/`
 - `plugins/superpowers/hooks/`
 - `plugins/superpowers/hooks.json`
+- marketplace policy: `INSTALLED_BY_DEFAULT`
 
 ## Installation
 

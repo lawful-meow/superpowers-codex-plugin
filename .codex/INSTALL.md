@@ -41,7 +41,7 @@ Install this wrapper by cloning the repository, copying the packaged plugin to y
        "path": "./plugins/superpowers"
      },
      "policy": {
-       "installation": "AVAILABLE",
+       "installation": "INSTALLED_BY_DEFAULT",
        "authentication": "ON_INSTALL"
      },
      "category": "Coding"
@@ -58,6 +58,8 @@ Install this wrapper by cloning the repository, copying the packaged plugin to y
    ```
 
 6. Restart Codex.
+
+With `policy.installation` set to `INSTALLED_BY_DEFAULT`, the plugin is intended to appear as installed automatically when this marketplace is loaded.
 
 ## Verify
 
